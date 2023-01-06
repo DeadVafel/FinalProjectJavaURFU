@@ -234,6 +234,8 @@ class ConnectionDataBase {
 
 ```
 
+<br />
+
 > Файл ***DataBase***
 
 пропишем вызовы ранее написанных методов:
@@ -277,6 +279,7 @@ class ConnectionDataBase {
     }
 }
 ```
+
 <br /> 
 
 > Файл ***Main*** 
@@ -302,6 +305,8 @@ public static void main(String[] args) throws SQLException, ClassNotFoundExcepti
 
 Сначала определимся с тем, какие данные нам нужны по заданию (Глубина в метрах, Магнитуда, Штат, Время)
 
+<br />
+
 > Файл ***DataBase***
 
 Создадим 4 колонки 
@@ -314,6 +319,488 @@ public static void createDataBase() throws SQLException {
 ```
 
 Теперь наша задача передать распарсенные данные в файл ***DataBase*** 
+
+<br />
+
+> Файл ***Main***
+
+Прописываем метод `purificationAndSendToDatabase`, в нем мы удаляем ненужные нам данные и отправляем обработанные данные для добавления их в базу данных
+
+```Java
+private static void purificationAndSendToDatabase(List<String> elements) throws SQLException, ClassNotFoundException {
+        List<String> sliceOfElements = new ArrayList<>();
+        for (int index = 6; index < elements.size(); index++) {
+            sliceOfElements.add(elements.get(index));
+            if (sliceOfElements.size() >= 6) {
+                sliceOfElements.remove(0);
+                sliceOfElements.remove(1);
+                DataBase.main(sliceOfElements);
+                sliceOfElements.clear();
+            }
+        }
+    }
+```
+
+<br />
+
+> Файл ***DataBase***
+
+Помещаем все данные в метод `writeDataBase`:
+
+```Java
+public class DataBase {
+
+    public static void main(List<String> elements) throws ClassNotFoundException, SQLException {
+        ConnectionDataBase.connection();
+        ConnectionDataBase.createDataBase();
+        ConnectionDataBase.writeDataBase(elements.get(0), elements.get(1), elements.get(2), elements.get(3));
+        ConnectionDataBase.closeDB();
+    }
+}
+
+class ConnectionDataBase {
+    public static java.sql.Connection conn;
+    public static Statement statement;
+    public static ResultSet resSet;
+
+    public static void connection() throws ClassNotFoundException, SQLException {
+        conn = null;
+        Class.forName("org.sqlite.JDBC");
+        conn = DriverManager.getConnection("jdbc:sqlite:src\\data.db");
+    }
+
+    public static void createDataBase() throws SQLException {
+        statement = conn.createStatement();
+        statement.execute("CREATE TABLE if not exists 'data' (Depth STRING, Magnitude STRING, State STRING, Time String, UNIQUE (Depth, Magnitude, State, Time));");
+    }
+
+    public static void writeDataBase(String depth, String magnitude, String state, String time) throws SQLException {
+        statement.execute(String.format("INSERT OR REPLACE INTO 'data'('Depth', 'Magnitude', 'State', 'Time') " +
+                "VALUES ('%s', '%2s', '%3s', '%4s');", depth, magnitude, state, time));
+    }
+
+    public static List<String> readDataBase() throws ClassNotFoundException, SQLException
+    {
+        conn = null;
+        Class.forName("org.sqlite.JDBC");
+        conn = DriverManager.getConnection("jdbc:sqlite:src\\data.db");
+        statement = conn.createStatement();
+        resSet = statement.executeQuery("SELECT * FROM data");
+
+        List<String> dataFromDataBase = new ArrayList<>();
+
+        while(resSet.next())
+        {
+            dataFromDataBase.add(resSet.getString("Depth"));
+            dataFromDataBase.add( resSet.getString("Magnitude"));
+            dataFromDataBase.add(resSet.getString("State"));
+            dataFromDataBase.add(resSet.getString("Time"));
+        }
+
+        conn.close();
+        resSet.close();
+
+        return dataFromDataBase;
+    }
+
+
+    public static void closeDB() throws SQLException {
+        conn.close();
+        statement.close();
+    }
+}
+```
+
+<br />
+
+Теперь в таблице мы имеем все нужные нам данные из csv файла:
+
+![image](https://user-images.githubusercontent.com/114663524/211085833-a31b4b74-64de-4d02-b7c4-9efa826f8946.png)
+
+<br />
+
+> Файл ***DataBase***
+
+Чтобы работать с этими данными нужно их забрать из базы данных, для этого создаем метод `readDataBase`:
+
+```Java
+public static List<String> readDataBase() throws ClassNotFoundException, SQLException {
+        conn = null;
+        Class.forName("org.sqlite.JDBC");
+        conn = DriverManager.getConnection("jdbc:sqlite:src\\data.db");
+        statement = conn.createStatement();
+        resSet = statement.executeQuery("SELECT * FROM data");
+
+        List<String> dataFromDataBase = new ArrayList<>();
+
+        while (resSet.next()) {
+            dataFromDataBase.add(resSet.getString("Depth"));
+            dataFromDataBase.add(resSet.getString("Magnitude"));
+            dataFromDataBase.add(resSet.getString("State"));
+            dataFromDataBase.add(resSet.getString("Time"));
+        }
+
+        conn.close();
+        resSet.close();
+
+        return dataFromDataBase;
+    }
+```
+
+> Файл ***Main***
+
+Принимаем эти данные:
+
+```Java
+public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        var elements = parsingCsvFile();
+        purificationAndSendToDatabase(elements);
+        var dataFromDataBase = ConnectionDataBase.readDataBase();
+        System.out.println(dataFromDataBase);
+    }
+```
+
+Выводим на экран:
+
+![image](https://user-images.githubusercontent.com/114663524/211089027-58869f2c-128e-46f9-b47b-4f041e8be2dc.png)
+___
+
+### Выполнение 2 задачи
+
+У нас есть необходимая информация, теперь мы можем выполнить задачу (Выведите в консоль среднюю магнитуду для штата "West Virginia")
+
+> Файл `Main`
+
+Для этого мы заранее создали метод `gettingAverageMagnitude`
+
+```Java
+private static Double gettingAverageMagnitude(List<String> dataFromDataBase, String state) {
+        var averageMagnitude = 0.0;
+        var count = 0;
+        for (int i = 2; i < dataFromDataBase.size(); i += 4) {
+            if (Objects.equals(dataFromDataBase.get(i).toLowerCase(), state.toLowerCase())) {
+                count++;
+                averageMagnitude += Float.parseFloat(dataFromDataBase.get(i - 1));
+            }
+        }
+        return averageMagnitude / count;
+    }
+```
+
+Выводим данные на экран
+
+```Java
+public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        var elements = parsingCsvFile();
+        purificationAndSendToDatabase(elements);
+        var dataFromDataBase = ConnectionDataBase.readDataBase();
+        var averageMagnitude = gettingAverageMagnitude(dataFromDataBase, "West Virginia");
+        System.out.println("Средняя магнитуда для штата West Virginia: " + averageMagnitude);
+    }
+```
+
+Получаем
+
+![image](https://user-images.githubusercontent.com/114663524/211092703-dc45f5ae-0ee8-41c5-ba13-2722d2cc882c.png)
+___
+
+### Выполнение 3 задачи
+
+У нас есть необходимая информация, теперь мы можем выполнить задачу (Выведите в консоль название штата, в котором произошло самое глубокое землетрясение в 2013 году)
+
+> Файл `Main`
+
+Для этого мы заранее создали метод `gettingTheDeepestEarthquake`
+
+```Java
+private static String gettingTheDeepestEarthquake(List<String> dataFromDataBase) {
+        List<Integer> depth = new ArrayList<>();
+        for (int i = 0; i < dataFromDataBase.size(); i += 4) {
+            if (Objects.equals(dataFromDataBase.get(i + 3).substring(0, 4), "2013")) {
+                depth.add(Integer.parseInt(dataFromDataBase.get(i)));
+            }
+        }
+        return dataFromDataBase.get(dataFromDataBase.indexOf(Integer.toString(Collections.max(depth))) + 2);
+    }
+```
+
+Выводим данные на экран
+
+```Java
+public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        var elements = parsingCsvFile();
+        purificationAndSendToDatabase(elements);
+        var dataFromDataBase = ConnectionDataBase.readDataBase();
+        var averageMagnitude = gettingAverageMagnitude(dataFromDataBase, "West Virginia");
+        var stateTheDeepestEarthquake = gettingTheDeepestEarthquake(dataFromDataBase);
+        System.out.println("Средняя магнитуда для штата West Virginia: " + averageMagnitude);
+        System.out.println("Название штата, в котором произошло самое глубокое землятресение: " + stateTheDeepestEarthquake);
+    }
+```
+
+Получаем
+
+![image](https://user-images.githubusercontent.com/114663524/211097474-006f2c18-b769-4cfc-a843-a67566cf440c.png)
+___
+
+### Выполнение 1 задачи
+
+Для выполнения задачи (Постройте график по среднему количеству землетрясений для каждого года) нужно построить график, для этого мы заранее создали файл `Graph` в котором и будем его строить
+
+> для построение графика нужно скачать библиотеку jfreechart
+
+> Файл `Graph`
+
+Создаём тестовый график с 4 столбцами и тестовыми данными
+
+```Java
+public class Graph extends JFrame {
+
+    public Graph() {
+        initUI();
+    }
+
+    private void initUI() {
+
+        CategoryDataset dataset = createDataset();
+
+        JFreeChart chart = createChart(dataset);
+        ChartPanel chartPanel = new ChartPanel(chart);
+        chartPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        chartPanel.setBackground(Color.white);
+        add(chartPanel);
+
+        pack();
+        setTitle("Тестовый график");
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    private CategoryDataset createDataset() {
+
+        var dataset = new DefaultCategoryDataset();
+
+        dataset.setValue(1, "Test1", "1");
+        dataset.setValue(2, "Test2", "2");
+        dataset.setValue(3, "Test3", "3");
+        dataset.setValue(4, "Test4", "4");
+
+        return dataset;
+    }
+
+    private JFreeChart createChart(CategoryDataset dataset) {
+
+        return ChartFactory.createBarChart(
+                "",
+                "",
+                "",
+                dataset,
+                PlotOrientation.VERTICAL,
+                true, true, false);
+    }
+
+    public static void main() {
+
+        EventQueue.invokeLater(() -> {
+
+            var ex = new Graph();
+            ex.setVisible(true);
+        });
+    }
+}
+```
+
+Вызываем этот класс:
+
+```Java
+public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        var elements = parsingCsvFile();
+        purificationAndSendToDatabase(elements);
+        var dataFromDataBase = ConnectionDataBase.readDataBase();
+        var averageMagnitude = gettingAverageMagnitude(dataFromDataBase, "West Virginia");
+        var stateTheDeepestEarthquake = gettingTheDeepestEarthquake(dataFromDataBase);
+        System.out.println("Средняя магнитуда для штата West Virginia: " + averageMagnitude);
+        System.out.println("Название штата, в котором произошло самое глубокое землятресение: " + stateTheDeepestEarthquake);
+        Graph.main();
+    }
+```
+
+Получаем:
+
+![image](https://user-images.githubusercontent.com/114663524/211103083-a1c150c1-df51-400e-98c8-96ef4aef66c2.png)
+
+> Файл ***Main***
+
+Для того, чтобы высчитать среднее количество землятресений для каждого года нам нужно: год, список штатов (где были землетрясения), время каждого землетрясения
+
+Нужно высчитать сколько раз были землетрясения в каждом штате, сложить количество землетрясений и разделить на количество штатов
+
+Для удобства сначала нужно отсортировать данные из базы данных в методе `sortingDataFromDataBase`
+
+```Java
+private static List<String> sortingDataFromDataBase(List<String> dataFromDataBase) {
+        List<String> stateAndData = new ArrayList<>();
+        List<String> sortedDataFromDataBase = new ArrayList<>();
+        Set<String> numberOfEarthquakes = new HashSet<>();
+
+        //очистка даты
+        for (int index = 3; index < dataFromDataBase.size(); index += 4) {
+            Collections.replaceAll(dataFromDataBase, dataFromDataBase.get(index), dataFromDataBase.get(index).substring(0, 4));
+        }
+
+        //объединение штата и времени для простоты подсчета количества землятресений в каждом штате
+        for (int index = 2; index < dataFromDataBase.size(); index += 4) {
+            stateAndData.add(dataFromDataBase.get(index) + "&" + dataFromDataBase.get(index + 1));
+        }
+
+        //подсчет количества землятресений в каждом штате
+        for (String s : stateAndData) {
+            numberOfEarthquakes.add(s + "&" + Collections.frequency(stateAndData, s));
+        }
+
+        //упорядочивание
+        for (int year = 1973; year <= 2015; year++) {
+            for (String s : numberOfEarthquakes) {
+                if (Objects.equals(s.split("&")[1], Integer.toString(year))) {
+                    sortedDataFromDataBase.add(s);
+                }
+            }
+        }
+
+        return sortedDataFromDataBase;
+    }
+```
+
+Выведем на экран:
+
+```Java
+public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        var elements = parsingCsvFile();
+        purificationAndSendToDatabase(elements);
+        var dataFromDataBase = ConnectionDataBase.readDataBase();
+        var averageMagnitude = gettingAverageMagnitude(dataFromDataBase, "West Virginia");
+        var stateTheDeepestEarthquake = gettingTheDeepestEarthquake(dataFromDataBase);
+        var sortedDataFromDataBase = sortingDataFromDataBase(dataFromDataBase);
+        System.out.println(sortedDataFromDataBase);
+        System.out.println("Средняя магнитуда для штата West Virginia: " + averageMagnitude);
+        System.out.println("Название штата, в котором произошло самое глубокое землятресение: " + stateTheDeepestEarthquake);
+    }
+```
+
+Получим:
+
+![image](https://user-images.githubusercontent.com/114663524/211107176-98240613-4cdd-4cd2-b435-8f4dadcd1936.png)
+
+Теперь необходимо расположить все данные по возрастнию годов и отправить в файл ***Graph*** для построение графика, всё это мы делаем в методе `sendToMakeGraph`:
+
+```Java
+private static void sendToMakeGraph(List<String> sortedDataFromDataBase) {
+        List<String> infoForGraph = new ArrayList<>();
+        for (int year = 1973; year <= 2015; year++) {
+            double amountByState = 0.0;
+            double countByYear = 0.0;
+            for (String s : sortedDataFromDataBase) {
+                if (Objects.equals(s.split("&")[1], Integer.toString(year))) {
+                    countByYear++;
+                    amountByState += Float.parseFloat(s.split("&")[2]);
+                }
+            }
+            if (countByYear != 0.0) {
+                infoForGraph.add(amountByState / countByYear + "&" + year);
+            }
+        }
+        Graph.main(infoForGraph);
+    }
+}
+```
+
+> Файл ***Graph***
+
+Обрабатываем полученные данные и выводим их на графике:
+
+```Java
+public class Graph extends JFrame {
+
+    public Graph(List<String> infoFromDB) {
+        initUI(infoFromDB);
+    }
+
+    private void initUI(List<String> infoFromDB) {
+
+        CategoryDataset dataset = createDataset(infoFromDB);
+
+        JFreeChart chart = createChart(dataset);
+        ChartPanel chartPanel = new ChartPanel(chart);
+        chartPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        chartPanel.setBackground(Color.white);
+        add(chartPanel);
+
+        pack();
+        setTitle("Среднее количество землятресений");
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    private CategoryDataset createDataset(List<String> informationForGraph) {
+
+        var dataset = new DefaultCategoryDataset();
+
+        for (String s : informationForGraph) {
+            var year = s.split("&")[1];
+            var averageValue = s.split("&")[0];
+            dataset.setValue(Double.parseDouble(averageValue), year, "Годы");
+        }
+
+        return dataset;
+    }
+
+    private JFreeChart createChart(CategoryDataset dataset) {
+
+        return ChartFactory.createBarChart(
+                "",
+                "",
+                "Среднее количество землятресений",
+                dataset,
+                PlotOrientation.VERTICAL,
+                true, true, false);
+    }
+
+    public static void main(List<String> informationForGraph) {
+
+        EventQueue.invokeLater(() -> {
+
+            var ex = new Graph(informationForGraph);
+            ex.setVisible(true);
+        });
+    }
+}
+```
+
+> Файл `Main`
+
+Выводим 
+
+```Java
+public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        var elements = parsingCsvFile();
+        purificationAndSendToDatabase(elements);
+        var dataFromDataBase = ConnectionDataBase.readDataBase();
+        var sortedDataFromDataBase = sortingDataFromDataBase(dataFromDataBase);
+        sendToMakeGraph(sortedDataFromDataBase);
+        var averageMagnitude = gettingAverageMagnitude(dataFromDataBase, "West Virginia");
+        var stateTheDeepestEarthquake = gettingTheDeepestEarthquake(dataFromDataBase);
+        System.out.println("Средняя магнитуда для штата West Virginia: " + averageMagnitude);
+        System.out.println("Название штата, в котором произошло самое глубокое землятресение: " + stateTheDeepestEarthquake);
+    }
+```
+
+Получаем график:
+
+![image](https://user-images.githubusercontent.com/114663524/211108451-d37f7170-f777-4ef8-839a-cef5de555184.png)
+___
+
+
+
 
 
 
