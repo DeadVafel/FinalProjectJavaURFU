@@ -11,7 +11,7 @@ public class DataBase {
         ConnectionDataBase.connection();
         ConnectionDataBase.createDataBase();
         ConnectionDataBase.writeDataBase(elements.get(0), elements.get(1), elements.get(2), elements.get(3));
-        ConnectionDataBase.closeDB();
+        ConnectionDataBase.closeDataBase();
     }
 }
 
@@ -61,7 +61,7 @@ class ConnectionDataBase {
     }
 
 
-    public static void closeDB() throws SQLException {
+    public static void closeDataBase() throws SQLException {
         conn.close();
         statement.close();
     }
