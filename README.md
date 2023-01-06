@@ -26,15 +26,15 @@ ___
 
 ![image](https://user-images.githubusercontent.com/114663524/210892187-6446c488-da09-4980-9f5e-53c50778ce00.png)
 
-Файл ***Main*** является основным, в нем мы будем писать основную логику программы и будем взаимодействовать с другими файлами в нашем проекте
+Файл ***Main.java*** является основным, в нем мы будем писать основную логику программы и будем взаимодействовать с другими файлами в нашем проекте
 
-Файл ***DataBase*** будет содержать в себе необходимые методы для взаимодействия с базой данных
+Файл ***DataBase.java*** будет содержать в себе необходимые методы для взаимодействия с базой данных
 
-Файл ***Graph*** будет содержать в себе необходимые методы для построения графика
+Файл ***Graph.java*** будет содержать в себе необходимые методы для построения графика
 
 <br />
 
->Файл ***Main***
+>Файл ***Main.java***
 
 создадим нужные нам методы:
 ```Java
@@ -72,7 +72,7 @@ public class Main {
 
 Метод `parsingCsvFile` будет парсить файл, который находится в задании
 
-Метод `purificationAndSendToDatabase` будет получать данные из метода `parsingCsvFile` и отправлять их в файл ***DataBase*** для добавления в базу данных 
+Метод `purificationAndSendToDatabase` будет получать данные из метода `parsingCsvFile` и отправлять их в файл ***DataBase.java*** для добавления в базу данных 
 
 Метод `gettingAverageMagnitude` будет получать данные из базы данных и выполнять 2 задачу (Выведите в консоль среднюю магнитуду для штата "West Virginia")
 
@@ -80,7 +80,7 @@ public class Main {
 
 Метод `sortingDataFromDataBase` будет брать данные из базы данных и сортировать их для последующей обработи в методе `sendToMakeGraph`
 
-Метод `sendToMakeGraph` обрабатывает данные из метода `sortingDataFromDataBase` и отправляет данные в файл ***Graph*** для выполнения 1 задачи (Постройте график по среднему количеству землетрясений для каждого года)
+Метод `sendToMakeGraph` обрабатывает данные из метода `sortingDataFromDataBase` и отправляет данные в файл ***Graph.java*** для выполнения 1 задачи (Постройте график по среднему количеству землетрясений для каждого года)
 ____
 
 <a name="2"></a>
@@ -91,7 +91,7 @@ ____
 
 ![image](https://user-images.githubusercontent.com/114663524/210904699-a0b066f1-af4a-4c15-9081-80469fb5a42c.png)
 
-> Файл ***Main***
+> Файл ***Main.java***
 
 Пропишем метод `parsingCsvFile`:
 
@@ -156,7 +156,7 @@ ___
 
 ### Создание базы данных (SQL Lite) и подключение к проекту
 
-> Файл ***DataBase***
+> Файл ***DataBase.java***
 
 создадим класс `ConnectionDataBase` который будет присоединяться и работать с базой данных (SQL Lite):
 
@@ -257,7 +257,7 @@ class ConnectionDataBase {
 
 <br />
 
-> Файл ***DataBase***
+> Файл ***DataBase.java***
 
 пропишем вызовы ранее написанных методов:
 
@@ -303,7 +303,7 @@ class ConnectionDataBase {
 
 <br /> 
 
-> Файл ***Main*** 
+> Файл ***Main.java*** 
 
 вызовем метод `main` класса `DataBase`:
 
@@ -328,7 +328,7 @@ public static void main(String[] args) throws SQLException, ClassNotFoundExcepti
 
 <br />
 
-> Файл ***DataBase***
+> Файл ***DataBase.java***
 
 Создадим 4 колонки 
 
@@ -339,11 +339,11 @@ public static void createDataBase() throws SQLException {
     }
 ```
 
-Теперь наша задача передать распарсенные данные в файл ***DataBase*** 
+Теперь наша задача передать распарсенные данные в файл ***DataBase.java*** 
 
 <br />
 
-> Файл ***Main***
+> Файл ***Main.java***
 
 Прописываем метод `purificationAndSendToDatabase`, в нем мы удаляем ненужные нам данные и отправляем обработанные данные для добавления их в базу данных
 
@@ -364,7 +364,7 @@ private static void purificationAndSendToDatabase(List<String> elements) throws 
 
 <br />
 
-> Файл ***DataBase***
+> Файл ***DataBase.java***
 
 Помещаем все данные в метод `writeDataBase`:
 
@@ -440,7 +440,7 @@ class ConnectionDataBase {
 
 <br />
 
-> Файл ***DataBase***
+> Файл ***DataBase.java***
 
 Чтобы работать с этими данными нужно их забрать из базы данных, для этого создаем метод `readDataBase`:
 
@@ -468,7 +468,7 @@ public static List<String> readDataBase() throws ClassNotFoundException, SQLExce
     }
 ```
 
-> Файл ***Main***
+> Файл ***Main.java***
 
 Принимаем эти данные:
 
@@ -492,7 +492,7 @@ ___
 
 У нас есть необходимая информация, теперь мы можем выполнить задачу (Выведите в консоль среднюю магнитуду для штата "West Virginia")
 
-> Файл `Main`
+> Файл ***Main.java***
 
 Для этого мы заранее создали метод `gettingAverageMagnitude`
 
@@ -533,7 +533,7 @@ ___
 
 У нас есть необходимая информация, теперь мы можем выполнить задачу (Выведите в консоль название штата, в котором произошло самое глубокое землетрясение в 2013 году)
 
-> Файл `Main`
+> Файл ***Main.java***
 
 Для этого мы заранее создали метод `gettingTheDeepestEarthquake`
 
@@ -576,7 +576,7 @@ ___
 
 > для построение графика нужно скачать библиотеку jfreechart
 
-> Файл `Graph`
+> Файл ***Graph.java***
 
 Создаём тестовый график с 4 столбцами и тестовыми данными
 
@@ -656,7 +656,7 @@ public static void main(String[] args) throws SQLException, ClassNotFoundExcepti
 
 ![image](https://user-images.githubusercontent.com/114663524/211103083-a1c150c1-df51-400e-98c8-96ef4aef66c2.png)
 
-> Файл ***Main***
+> Файл ***Main.java***
 
 Для того, чтобы высчитать среднее количество землятресений для каждого года нам нужно: год, список штатов (где были землетрясения), время каждого землетрясения
 
@@ -741,7 +741,7 @@ private static void sendToMakeGraph(List<String> sortedDataFromDataBase) {
 }
 ```
 
-> Файл ***Graph***
+> Файл ***Graph.java***
 
 Обрабатываем полученные данные и выводим их на графике:
 
@@ -803,7 +803,7 @@ public class Graph extends JFrame {
 }
 ```
 
-> Файл `Main`
+> Файл ***Main.java***
 
 Выводим 
 
@@ -825,26 +825,3 @@ public static void main(String[] args) throws SQLException, ClassNotFoundExcepti
 
 ![image](https://user-images.githubusercontent.com/114663524/211108451-d37f7170-f777-4ef8-839a-cef5de555184.png)
 ___
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
