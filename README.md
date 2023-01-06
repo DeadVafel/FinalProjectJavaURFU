@@ -28,7 +28,7 @@ ___
 
 Файл ***Main.java*** является основным, в нем мы будем писать основную логику программы и будем взаимодействовать с другими файлами в нашем проекте
 
-Файл ***DataBase.java*** будет содержать в себе необходимые методы для взаимодействия с базой данных
+Файл ***DataBase.java*** будет содержать в себе необходимые классы и методы для взаимодействия с базой данных
 
 Файл ***Graph.java*** будет содержать в себе необходимые методы для построения графика
 
@@ -68,7 +68,7 @@ public class Main {
     }
 }
 ```
-Метод `main` будет вызывать все остальные методы  
+Метод `main` будет вызывать все остальные методы и перенаправлять данные 
 
 Метод `parsingCsvFile` будет парсить файл, который находится в задании
 
@@ -91,9 +91,11 @@ ____
 
 ![image](https://user-images.githubusercontent.com/114663524/210904699-a0b066f1-af4a-4c15-9081-80469fb5a42c.png)
 
+<br />
+
 > Файл ***Main.java***
 
-Пропишем метод `parsingCsvFile`:
+Пропишем метод `parsingCsvFile` и выведем результат на экран:
 
 ```Java
 public class Main {
@@ -156,6 +158,8 @@ ___
 
 ### Создание базы данных (SQL Lite) и подключение к проекту
 
+<br />
+
 > Файл ***DataBase.java***
 
 создадим класс `ConnectionDataBase` который будет присоединяться и работать с базой данных (SQL Lite):
@@ -204,7 +208,7 @@ class ConnectionDataBase {
 
     }
 
-    public static void closeDB() throws SQLException {
+    public static void closeDataBase() throws SQLException {
         conn.close();
         statement.close();
     }
@@ -217,7 +221,7 @@ class ConnectionDataBase {
 
 Метод `writeDataBase` будет заполнять таблицу нужными данными 
 
-Метод `closeDB` будет закрывать соединение с базой данных
+Метод `closeDataBase` будет закрывать соединение с базой данных
 
 Попробуем создать тестовую базу данных с 6 колонками и 6 значениями:
 
@@ -247,7 +251,7 @@ class ConnectionDataBase {
                 "VALUES ('test1', 'test2', 'test3', 'test4', 'test5', 'test6');"));
     }
 
-    public static void closeDB() throws SQLException {
+    public static void closeDataBase() throws SQLException {
         conn.close();
         statement.close();
     }
@@ -268,7 +272,7 @@ public class DataBase {
         ConnectionDataBase.connection();
         ConnectionDataBase.createDataBase();
         ConnectionDataBase.writeDataBase();
-        ConnectionDataBase.closeDB();
+        ConnectionDataBase.closeDataBase();
     }
 }
 
@@ -294,7 +298,7 @@ class ConnectionDataBase {
                 "VALUES ('test1', 'test2', 'test3', 'test4', 'test5', 'test6');"));
     }
 
-    public static void closeDB() throws SQLException {
+    public static void closeDataBase() throws SQLException {
         conn.close();
         statement.close();
     }
@@ -375,7 +379,7 @@ public class DataBase {
         ConnectionDataBase.connection();
         ConnectionDataBase.createDataBase();
         ConnectionDataBase.writeDataBase(elements.get(0), elements.get(1), elements.get(2), elements.get(3));
-        ConnectionDataBase.closeDB();
+        ConnectionDataBase.closeDataBase();
     }
 }
 
@@ -400,32 +404,7 @@ class ConnectionDataBase {
                 "VALUES ('%s', '%2s', '%3s', '%4s');", depth, magnitude, state, time));
     }
 
-    public static List<String> readDataBase() throws ClassNotFoundException, SQLException
-    {
-        conn = null;
-        Class.forName("org.sqlite.JDBC");
-        conn = DriverManager.getConnection("jdbc:sqlite:src\\data.db");
-        statement = conn.createStatement();
-        resSet = statement.executeQuery("SELECT * FROM data");
-
-        List<String> dataFromDataBase = new ArrayList<>();
-
-        while(resSet.next())
-        {
-            dataFromDataBase.add(resSet.getString("Depth"));
-            dataFromDataBase.add( resSet.getString("Magnitude"));
-            dataFromDataBase.add(resSet.getString("State"));
-            dataFromDataBase.add(resSet.getString("Time"));
-        }
-
-        conn.close();
-        resSet.close();
-
-        return dataFromDataBase;
-    }
-
-
-    public static void closeDB() throws SQLException {
+    public static void closeDataBase() throws SQLException {
         conn.close();
         statement.close();
     }
