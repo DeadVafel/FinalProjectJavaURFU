@@ -4,7 +4,24 @@ ___
 ### Вариант: 5
 ___
 
+### Оглавление:
+
+* [Создание структуры проекта и основных методов](#1)
+
+* [Парсинг данных](#2)
+
+* [Создание базы данных (SQL Lite) и подключение к проекту](#3)
+
+* [Выполнение 2 задачи](#4)
+
+* [Выполнение 3 задачи](#5)
+
+* [Выполнение 1 задачи](#6)
+
+<a name="1"></a>
+
 ### Создание структуры проекта и основных методов
+
 После прочтения задания мы можем создать структуру проекта:
 
 ![image](https://user-images.githubusercontent.com/114663524/210892187-6446c488-da09-4980-9f5e-53c50778ce00.png)
@@ -51,7 +68,7 @@ public class Main {
     }
 }
 ```
-Метод `main` будет вызывать все остальные методы 
+Метод `main` будет вызывать все остальные методы  
 
 Метод `parsingCsvFile` будет парсить файл, который находится в задании
 
@@ -65,6 +82,8 @@ public class Main {
 
 Метод `sendToMakeGraph` обрабатывает данные из метода `sortingDataFromDataBase` и отправляет данные в файл ***Graph*** для выполнения 1 задачи (Постройте график по среднему количеству землетрясений для каждого года)
 ____
+
+<a name="2"></a>
 
 ### Парсинг данных 
 
@@ -132,6 +151,8 @@ public class Main {
 ![image](https://user-images.githubusercontent.com/114663524/210906191-627516d5-1cad-4b74-b1a5-ba80b327054c.png)
 
 ___
+
+<a name="3"></a>
 
 ### Создание базы данных (SQL Lite) и подключение к проекту
 
@@ -465,6 +486,8 @@ public static void main(String[] args) throws SQLException, ClassNotFoundExcepti
 ![image](https://user-images.githubusercontent.com/114663524/211089027-58869f2c-128e-46f9-b47b-4f041e8be2dc.png)
 ___
 
+<a name="4"></a>
+
 ### Выполнение 2 задачи
 
 У нас есть необходимая информация, теперь мы можем выполнить задачу (Выведите в консоль среднюю магнитуду для штата "West Virginia")
@@ -504,6 +527,8 @@ public static void main(String[] args) throws SQLException, ClassNotFoundExcepti
 ![image](https://user-images.githubusercontent.com/114663524/211092703-dc45f5ae-0ee8-41c5-ba13-2722d2cc882c.png)
 ___
 
+<a name="5"></a>
+
 ### Выполнение 3 задачи
 
 У нас есть необходимая информация, теперь мы можем выполнить задачу (Выведите в консоль название штата, в котором произошло самое глубокое землетрясение в 2013 году)
@@ -542,6 +567,8 @@ public static void main(String[] args) throws SQLException, ClassNotFoundExcepti
 
 ![image](https://user-images.githubusercontent.com/114663524/211097474-006f2c18-b769-4cfc-a843-a67566cf440c.png)
 ___
+
+<a name="6"></a>
 
 ### Выполнение 1 задачи
 
