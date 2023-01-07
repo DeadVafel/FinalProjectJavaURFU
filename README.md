@@ -36,7 +36,7 @@ ___
 
 >Файл ***Main.java***
 
-создадим нужные нам методы:
+Создадим нужные нам методы:
 ```Java
 public class Main {
     public static void main(String[] args) {
@@ -162,7 +162,7 @@ ___
 
 > Файл ***DataBase.java***
 
-создадим класс `ConnectionDataBase` который будет присоединяться и работать с базой данных (SQL Lite):
+Создадим класс `ConnectionDataBase` который будет присоединяться и работать с базой данных (SQL Lite):
 
 ```Java
 public class DataBase {
@@ -223,6 +223,8 @@ class ConnectionDataBase {
 
 Метод `closeDataBase` будет закрывать соединение с базой данных
 
+<br />
+
 Попробуем создать тестовую базу данных с 6 колонками и 6 значениями:
 
 > Для корректной работы метода `connection` необходимо установить драйвер SQLite JDBC 
@@ -263,7 +265,7 @@ class ConnectionDataBase {
 
 > Файл ***DataBase.java***
 
-пропишем вызовы ранее написанных методов:
+Пропишем вызовы ранее написанных методов:
 
 ```Java
 public class DataBase {
@@ -309,7 +311,7 @@ class ConnectionDataBase {
 
 > Файл ***Main.java*** 
 
-вызовем метод `main` класса `DataBase`:
+Вызовем метод `main` класса `DataBase`:
 
 ```Java
 public static void main(String[] args) throws SQLException, ClassNotFoundException {
@@ -447,6 +449,8 @@ public static List<String> readDataBase() throws ClassNotFoundException, SQLExce
     }
 ```
 
+<br /> 
+
 > Файл ***Main.java***
 
 Принимаем эти данные:
@@ -470,6 +474,8 @@ ___
 ### Выполнение 2 задачи
 
 У нас есть необходимая информация, теперь мы можем выполнить задачу (Выведите в консоль среднюю магнитуду для штата "West Virginia")
+
+<br /> 
 
 > Файл ***Main.java***
 
@@ -511,6 +517,8 @@ ___
 ### Выполнение 3 задачи
 
 У нас есть необходимая информация, теперь мы можем выполнить задачу (Выведите в консоль название штата, в котором произошло самое глубокое землетрясение в 2013 году)
+
+<br /> 
 
 > Файл ***Main.java***
 
@@ -554,6 +562,8 @@ ___
 Для выполнения задачи (Постройте график по среднему количеству землетрясений для каждого года) нужно построить график, для этого мы заранее создали файл `Graph` в котором и будем его строить
 
 > для построение графика нужно скачать библиотеку jfreechart
+
+<br /> 
 
 > Файл ***Graph.java***
 
@@ -634,6 +644,8 @@ public static void main(String[] args) throws SQLException, ClassNotFoundExcepti
 Получаем:
 
 ![image](https://user-images.githubusercontent.com/114663524/211103083-a1c150c1-df51-400e-98c8-96ef4aef66c2.png)
+
+<br /> 
 
 > Файл ***Main.java***
 
@@ -720,6 +732,8 @@ private static void sendToMakeGraph(List<String> sortedDataFromDataBase) {
 }
 ```
 
+<br /> 
+
 > Файл ***Graph.java***
 
 Обрабатываем полученные данные и выводим их на графике:
@@ -781,6 +795,8 @@ public class Graph extends JFrame {
     }
 }
 ```
+
+<br /> 
 
 > Файл ***Main.java***
 
