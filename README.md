@@ -707,7 +707,7 @@ public static void main(String[] args) throws SQLException, ClassNotFoundExcepti
 
 ![image](https://user-images.githubusercontent.com/114663524/211107176-98240613-4cdd-4cd2-b435-8f4dadcd1936.png)
 
-Теперь необходимо расположить все данные по возрастнию годов и отправить в файл ***Graph*** для построение графика, всё это мы делаем в методе `sendToMakeGraph`:
+Теперь необходимо расположить все данные по возрастнию годов и отправить в файл ***Graph.java*** для построение графика, всё это мы делаем в методе `sendToMakeGraph`:
 
 ```Java
 private static void sendToMakeGraph(List<String> sortedDataFromDataBase) {
