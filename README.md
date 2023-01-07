@@ -341,13 +341,13 @@ public static void createDataBase() throws SQLException {
         statement = conn.createStatement();
         statement.execute("CREATE TABLE if not exists 'data' (Depth STRING, Magnitude STRING, State STRING, Time String, UNIQUE (Depth, Magnitude, State, Time));");
     }
-```
-
-Теперь наша задача передать распарсенные данные в файл ***DataBase.java*** 
+``` 
 
 <br />
 
 > Файл ***Main.java***
+
+Теперь наша задача передать распарсенные данные в файл ***DataBase.java***
 
 Прописываем метод `purificationAndSendToDatabase`, в нем мы удаляем ненужные нам данные и отправляем обработанные данные для добавления их в базу данных
 
