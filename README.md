@@ -734,7 +734,7 @@ private static void sendToMakeGraph(List<String> sortedDataFromDataBase) {
 
 > Файл ***Graph.java***
 
-Обрабатываем полученные данные и выводим их на графике:
+Обрабатываем полученные данные и создаём график:
 
 ```Java
 public class Graph extends JFrame {
