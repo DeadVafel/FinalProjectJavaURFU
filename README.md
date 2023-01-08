@@ -334,7 +334,7 @@ public static void main(String[] args) throws SQLException, ClassNotFoundExcepti
 
 > Файл ***DataBase.java***
 
-Создадим 4 колонки 
+Создадим 4 колонки:
 
 ```Java
 public static void createDataBase() throws SQLException {
@@ -349,7 +349,7 @@ public static void createDataBase() throws SQLException {
 
 Теперь наша задача передать распарсенные данные в файл ***DataBase.java***
 
-Прописываем метод `purificationAndSendToDatabase`, в нем мы удаляем ненужные нам данные и отправляем обработанные данные для добавления их в базу данных
+Прописываем метод `purificationAndSendToDatabase`, в нем мы удаляем ненужные нам данные и отправляем обработанные данные для добавления их в базу данных:
 
 ```Java
 private static void purificationAndSendToDatabase(List<String> elements) throws SQLException, ClassNotFoundException {
@@ -477,7 +477,7 @@ ___
 
 > Файл ***Main.java***
 
-Для этого мы заранее создали метод `gettingAverageMagnitude`
+Для этого мы заранее создали метод `gettingAverageMagnitude`, пропишем его:
 
 ```Java
 private static Double gettingAverageMagnitude(List<String> dataFromDataBase, String state) {
@@ -493,7 +493,7 @@ private static Double gettingAverageMagnitude(List<String> dataFromDataBase, Str
     }
 ```
 
-Выводим данные на экран
+Выводим данные на экран:
 
 ```Java
 public static void main(String[] args) throws SQLException, ClassNotFoundException {
@@ -505,7 +505,7 @@ public static void main(String[] args) throws SQLException, ClassNotFoundExcepti
     }
 ```
 
-Получаем
+Получаем:
 
 ![image](https://user-images.githubusercontent.com/114663524/211092703-dc45f5ae-0ee8-41c5-ba13-2722d2cc882c.png)
 ___
@@ -520,7 +520,7 @@ ___
 
 > Файл ***Main.java***
 
-Для этого мы заранее создали метод `gettingTheDeepestEarthquake`
+Для этого мы заранее создали метод `gettingTheDeepestEarthquake`, пропишем его:
 
 ```Java
 private static String gettingTheDeepestEarthquake(List<String> dataFromDataBase) {
@@ -534,7 +534,7 @@ private static String gettingTheDeepestEarthquake(List<String> dataFromDataBase)
     }
 ```
 
-Выводим данные на экран
+Выводим данные на экран:
 
 ```Java
 public static void main(String[] args) throws SQLException, ClassNotFoundException {
@@ -548,7 +548,7 @@ public static void main(String[] args) throws SQLException, ClassNotFoundExcepti
     }
 ```
 
-Получаем
+Получаем:
 
 ![image](https://user-images.githubusercontent.com/114663524/211097474-006f2c18-b769-4cfc-a843-a67566cf440c.png)
 ___
@@ -565,7 +565,7 @@ ___
 
 > Файл ***Graph.java***
 
-Создаём тестовый график с 4 столбцами и тестовыми данными
+Создаём тестовый график с 4 столбцами и тестовыми данными:
 
 ```Java
 public class Graph extends JFrame {
@@ -798,7 +798,7 @@ public class Graph extends JFrame {
 
 > Файл ***Main.java***
 
-Выводим 
+Выводим:
 
 ```Java
 public static void main(String[] args) throws SQLException, ClassNotFoundException {
